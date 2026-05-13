@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusCV — Trombinoscopique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">CV</div>
+    <div>
+      <div class="logo-text">CampusCV</div>
+      <div class="logo-sub">Trombinoscopique</div>
+    </div>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Navigation</span>
+    <a class="nav-item active" data-page="home" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Accueil
+    </a>
+    <a class="nav-item" data-page="members" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2M16 3.13a4 4 0 010 7.75M21 21v-2a4 4 0 00-3-3.87"/></svg>Membres
+    </a>
+    <a class="nav-item" data-page="search" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>Rechercher
+    </a>
+    <a class="nav-item" data-page="add" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Ajouter un profil
+    </a>
+  </div>
+  <div class="nav-group" style="margin-top:auto">
+    <span class="nav-label">Systeme</span>
+    <a class="nav-item" data-page="settings" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Parametres
+    </a>
+  </div>
+</nav>
+
+<button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+<div class="overlay" id="overlay" onclick="window.__app.closeSidebar()"></div>
+
+<main class="main">
+
+  <div class="page active" id="page-home">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Bienvenue !</h1>
+        <p class="page-subtitle">Explorez les profils de votre promotion</p>
+      </div>
+      <button class="btn-primary" onclick="window.__app.navigateTo('add')">+ Mon profil</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-chip"><span class="sc-num" id="sc-total">0</span><span class="sc-lbl">Profils</span></div>
+      <div class="stat-chip"><span class="sc-num" id="sc-media">0</span><span class="sc-lbl">Avec media</span></div>
+      <div class="stat-chip"><span class="sc-num" id="sc-schools">0</span><span class="sc-lbl">Ecoles</span></div>
+      <div class="stat-chip"><span class="sc-num" id="sc-promos">0</span><span class="sc-lbl">Promotions</span></div>
+    </div>
+    <div class="section-label">Profils recents</div>
+    <div class="cards-grid" id="home-grid"></div>
+    <div class="empty-home" id="home-empty" style="display:none">
+      <div style="font-size:56px;margin-bottom:16px">&#127891;</div>
+      <p>Aucun profil pour l instant.</p>
+      <button class="btn-primary" onclick="window.__app.navigateTo('add')" style="margin-top:16px">Creer le premier profil</button>
+    </div>
+  </div>
+
+  <div class="page" id="page-members">
+    <div class="page-header">
+      <div><h1 class="page-title">Membres</h1><p class="page-subtitle">Annuaire de la promotion</p></div>
+      <div class="header-row">
+        <select class="sel" id="filter-promo" onchange="window.__app.renderMembers()"><option value="">Toutes promotions</option></select>
+        <select class="sel" id="filter-sort" onchange="window.__app.renderMembers()">
+          <option value="name">Nom A-Z</option>
+          <option value="date">Recents</option>
+          <option value="school">Ecole</option>
+        </select>
+        <button class="btn-primary" onclick="window.__app.navigateTo('add')">+ Ajouter</button>
+      </div>
+    </div>
+    <div class="cards-grid" id="members-grid"></div>
+    <div class="empty-state" id="members-empty" style="display:none">
+      <div class="ei">&#128101;</div>
+      <p>Aucun membre. <a href="#" onclick="window.__app.navigateTo('add')">Creer le premier profil</a></p>
+    </div>
+  </div>
+
+  <div class="page" id="page-search">
+    <div class="page-header">
+      <div><h1 class="page-title">Recherche</h1><p class="page-subtitle">Nom, ecole, competence, promotion...</p></div>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+      <input class="search-input" id="search-q" type="text" placeholder="Tapez un nom, une competence, une ecole..." oninput="window.__app.doSearch()">
+    </div>
+    <div class="cards-grid" id="search-grid"></div>
+    <div class="empty-state" id="search-empty" style="display:none"><div class="ei">&#128269;</div><p>Aucun resultat</p></div>
+  </div>
+
+  <div class="page" id="page-add">
+    <div class="page-header">
+      <div><h1 class="page-title" id="form-page-title">Nouveau profil</h1><p class="page-subtitle">Completez vos informations</p></div>
+      <button class="btn-ghost" onclick="window.__app.navigateTo('members')">&#8592; Annuler</button>
+    </div>
+    <div class="form-layout">
+      <div class="form-col">
+        <div class="fcard">
+          <div class="fcard-title">Identite</div>
+          <div class="fg2">
+            <div class="field"><label>Prenom *</label><input id="f-firstname" type="text" placeholder="Marie"></div>
+            <div class="field"><label>Nom *</label><input id="f-lastname" type="text" placeholder="Dupont"></div>
+            <div class="field"><label>Filiere / Specialite *</label><input id="f-specialty" type="text" placeholder="Genie Logiciel, Data Science..."></div>
+            <div class="field"><label>Ecole / Universite *</label><input id="f-school" type="text" placeholder="EPITECH, IUT de Paris..."></div>
+            <div class="field"><label>Promotion</label><input id="f-promo" type="text" placeholder="2025, Master 2..."></div>
+            <div class="field"><label>Ville</label><input id="f-city" type="text" placeholder="Paris, Douala..."></div>
+          </div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Presentation</div>
+          <div class="field"><label>Presentation personnelle *</label>
+            <textarea id="f-bio" rows="4" placeholder="Etudiant passionne par le developpement web, je recherche un stage..."></textarea>
+          </div>
+          <div class="field"><label>Competences (separees par des virgules)</label>
+            <input id="f-skills" type="text" placeholder="Python, React, SQL, Figma...">
+          </div>
+          <div class="field"><label>Objectif professionnel</label>
+            <input id="f-goal" type="text" placeholder="Stage de fin d etudes, alternance, premier emploi...">
+          </div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Parcours academique</div>
+          <div id="edu-list"></div>
+          <button class="btn-add-row" onclick="window.__app.addEduRow()">+ Formation</button>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Experiences (stages, jobs, benevolat)</div>
+          <div id="exp-list"></div>
+          <button class="btn-add-row" onclick="window.__app.addExpRow()">+ Experience</button>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Projets personnels</div>
+          <div id="proj-list"></div>
+          <button class="btn-add-row" onclick="window.__app.addProjRow()">+ Projet</button>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Langues</div>
+          <div id="lang-list"></div>
+          <button class="btn-add-row" onclick="window.__app.addLangRow()">+ Langue</button>
+        </div>
+      </div>
+
+      <div class="form-sidebar">
+        <div class="fcard">
+          <div class="fcard-title">Photo de profil</div>
+          <div class="photo-drop" onclick="document.getElementById('f-photo').click()">
+            <img id="photo-prev" src="" style="display:none">
+            <div id="photo-hint">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg>
+              <span>Cliquer pour importer<br><small>JPG, PNG, WEBP</small></span>
+            </div>
+          </div>
+          <input type="file" id="f-photo" accept="image/*" style="display:none" onchange="window.__app.handlePhoto(event)">
+        </div>
+
+        <div class="fcard">
+          <div class="fcard-title">Presentation media</div>
+          <p class="fcard-hint">Video MP4, audio MP3/WAV, ou lien YouTube/Vimeo. La synchronisation avec votre parcours sera automatique.</p>
+          <div class="media-tabs">
+            <button class="mtab active" id="mtab-btn-file" onclick="window.__app.switchTab('file')">Fichier local</button>
+            <button class="mtab" id="mtab-btn-url" onclick="window.__app.switchTab('url')">URL web</button>
+          </div>
+          <div id="tab-file">
+            <div class="media-drop" id="media-drop"
+              ondragover="event.preventDefault();this.classList.add('drag')"
+              ondragleave="this.classList.remove('drag')"
+              ondrop="window.__app.handleMediaDrop(event)"
+              onclick="document.getElementById('f-media-file').click()">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Glisser-deposer ou cliquer<br><small>MP4, MOV, WEBM &bull; MP3, WAV, OGG, M4A</small></span>
+            </div>
+            <input type="file" id="f-media-file" accept="video/*,audio/*" style="display:none" onchange="window.__app.handleMediaFile(event)">
+          </div>
+          <div id="tab-url" style="display:none">
+            <div class="field">
+              <label>URL YouTube / Vimeo</label>
+              <input type="url" id="f-media-url" placeholder="https://youtube.com/watch?v=...">
+            </div>
+            <button class="btn-ghost btn-sm" style="margin-top:8px" onclick="window.__app.previewUrl()">Previsualiser</button>
+          </div>
+          <div id="media-preview-wrap" style="display:none;margin-top:14px">
+            <div id="media-preview-el"></div>
+            <button class="btn-remove-media" onclick="window.__app.clearMedia()">Supprimer le media</button>
+          </div>
+        </div>
+
+        <div class="fcard" id="chapters-card" style="display:none">
+          <div class="fcard-title">Chapitres de synchronisation</div>
+          <p class="fcard-hint">Associez un moment (mm:ss) a une section de votre parcours.</p>
+          <div id="chapters-list"></div>
+          <button class="btn-add-row" onclick="window.__app.addChapterRow()">+ Ajouter un chapitre</button>
+        </div>
+
+        <div class="fcard">
+          <div class="fcard-title">Contact et Liens</div>
+          <div class="field"><label>Email</label><input type="email" id="f-email" placeholder="marie@email.com"></div>
+          <div class="field"><label>LinkedIn</label><input type="url" id="f-linkedin" placeholder="https://linkedin.com/in/..."></div>
+          <div class="field"><label>GitHub / Portfolio</label><input type="url" id="f-github" placeholder="https://github.com/..."></div>
+          <div class="field"><label>Je recherche</label>
+            <select id="f-status">
+              <option value="stage">Stage</option>
+              <option value="alternance">Alternance</option>
+              <option value="emploi">Premier emploi</option>
+              <option value="these">These / Doctorat</option>
+              <option value="freelance">Freelance</option>
+              <option value="indisponible">Indisponible</option>
+            </select>
+          </div>
+        </div>
+
+        <input type="hidden" id="f-id">
+        <input type="hidden" id="f-media-type" value="">
+        <input type="hidden" id="f-media-data" value="">
+
+        <button class="btn-primary btn-full" onclick="window.__app.saveProfile()">Enregistrer le profil</button>
+        <div class="form-msg" id="form-msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-profile">
+    <button class="back-btn" onclick="window.__app.goBack()">&#8592; Retour</button>
+    <div id="profile-content"></div>
+  </div>
+
+  <div class="page" id="page-settings">
+    <div class="page-header"><h1 class="page-title">Parametres</h1></div>
+    <div class="settings-grid">
+      <div class="scard">
+        <h3>Base de donnees (index.db)</h3>
+        <p>Stockage local IndexedDB</p>
+        <div class="db-info" id="db-info">Chargement...</div>
+        <div class="scard-actions">
+          <button class="btn-ghost" onclick="window.__app.exportDB()">Exporter JSON</button>
+          <button class="btn-ghost" onclick="document.getElementById('f-import').click()">Importer JSON</button>
+          <input type="file" id="f-import" accept=".json" style="display:none" onchange="window.__app.importDB(event)">
+        </div>
+      </div>
+      <div class="scard danger">
+        <h3>Zone de danger</h3>
+        <p>Supprimer tous les profils. Action irreversible.</p>
+        <button class="btn-danger" onclick="window.__app.clearAll()">Tout supprimer</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="/src/app.ts"></script>
+</body>
+</html>
